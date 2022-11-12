@@ -1,0 +1,59 @@
+$space-values : (
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40,
+        44,
+        48,
+        64,
+) !default;
+
+$space-prefixes : (
+        p  : padding,
+        pt : padding-top,
+        pr : padding-right,
+        pb : padding-bottom,
+        pl : padding-left,
+        m  : margin,
+        mt : margin-top,
+        mr : margin-right,
+        mb : margin-bottom,
+        ml : margin-left,
+        my : margin,
+        py : padding,
+        mx : margin,
+        px : padding
+) !default;
+
+@mixin make-space($values, $prefixes) {
+  @each $attr-short, $attr-long in $prefixes {
+    @each $value in $values {
+      @if($attr-short == 'my' or $attr-short == 'py') {
+        .#{$attr-short}-#{$value} {
+          #{$attr-long}-top: #{$value}#{'px'};
+          #{$attr-long}-bottom: #{$value}#{'px'};
+        }
+      }
+      @else if($attr-short == 'mx' or $attr-short == 'px') {
+        .#{$attr-short}-#{$value} {
+          #{$attr-long}-right: #{$value}#{'px'};
+          #{$attr-long}-left: #{$value}#{'px'};
+        }
+      }
+      @else {
+        .#{$attr-short}-#{$value} {
+          #{$attr-long}: #{$value}#{'px'};
+        }
+      }
+    }
+  }
+}
+
+@include make-space($space-values, $space-prefixes);

@@ -1,0 +1,20 @@
+export const errors = {
+  onlyWholeNumbers: 'Должны быть только целые не отрицательные числа',
+  errorWhileRequesting: {
+    default: 'Ошибка при запросе {message}: ',
+    aList: 'Ошибка при запросе списка {message}: ',
+    create: 'Ошибка при запросе создания {message}: ',
+    update: 'Ошибка при запросе обновления {message}: ',
+    delete: 'Ошибка при запросе удаления {message}: ',
+  },
+  fieldIsRequired: 'Поле обязательно для заполнения',
+  enterPartnerCode: 'Введите код партнёра',
+  enterProductCode: 'Введите код продукта',
+  enterProductType: 'Введите тип продукта',
+  enterProductName: 'Введите название продукта',
+  enterProductMinAmount: 'Введите минимальную сумму',
+  enterProductMaxAmount: 'Введите максимальную сумму',
+  enterProductTerm: 'Введите срок (в месяцах)',
+  enterProductRate: 'Введите ставку',
+  enterProductMonthlyAmount: 'Введите месячный платеж',
+}

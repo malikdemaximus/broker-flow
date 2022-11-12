@@ -1,0 +1,12 @@
+version: '3'
+services:
+  bg-merchant-offer-web:
+    container_name: bg-merchant-offer-web
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    ports:
+      - "8000:8000"

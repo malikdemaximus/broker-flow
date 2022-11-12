@@ -1,0 +1,4 @@
+include:
+  - project: devops/argocd-apps-config/gitlab-ci
+    ref: master
+    file: br-goods/def-gitlab-ci.yaml
