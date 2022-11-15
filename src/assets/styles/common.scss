@@ -34,12 +34,13 @@
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
-  padding: 12px 24px;
+  padding: 12px 22px;
   color: #FCFCFD;
   border: none;
   outline: none;
   width: 100%;
   transition: all .1s ease;
+  cursor: pointer
 }
 
 .default-button:hover {
@@ -63,16 +64,26 @@
 .process-content {
   max-width: 440px;
   width: 100%;
-  padding: 24px 52px;
+  padding: 24px 48px;
   background: #FFFFFF;
   box-shadow: 0px 31px 41px rgba(16, 20, 45, 0.11), 0px 14.604px 12.4842px rgba(16, 20, 45, 0.0625218), 0px 2.72809px 0.0569254px rgba(16, 20, 45, 0.0394782);
   border-radius: 8px;
 }
 
-.process-wrapper {
+.process-wrapper, .offers-wrapper {
   padding-top: 56px;
   display: flex;
   justify-content: center;
+}
+
+.offers-wrapper {
+  background-color: #fff;
+  min-height: calc(100vh - 84px);
+}
+
+.offers-content {
+  max-width: 884px;
+  width: 100%;
 }
 
 .title {

@@ -57,6 +57,9 @@ export const common = {
   just: 'Сәл қалды...',
   enterOtpCode: 'Мына нөмірге жіберілген SMS-тен кодты енгізіңіз:',
   resend: 'Қайта жіберу',
+  resendAfter: 'Қайта жіберу',
+  afterSec: 'кейін',
+  offersTitle: 'Серіктестердің ұсыныстары',
   paymentMethod: {
     title: 'Төлем әдістері',
     byCard: {

@@ -26,8 +26,16 @@
         и подписываю
         <a href="">Согласие на сбор и обработку персональных данных</a>
       </p>
-      <button disabled class="default-button">
-        <span>{{ $t('common.resend') }} 10 {{ $t('common.sec') }}</span>
+      <button
+        :disabled="seconds !== 0"
+        class="default-button"
+        @click="resetSeconds()"
+      >
+        <span v-if="seconds !== 0"
+          >{{ $t('common.resendAfter') }} {{ seconds }} {{ $t('common.sec') }}
+          {{ $t('common.afterSec') }}</span
+        >
+        <span v-else>{{ $t('common.resend') }}</span>
       </button>
     </div>
   </div>
@@ -44,6 +52,8 @@ export default {
       correctOtpValue: '1111',
       incorrectOtp: false,
       correctOtp: false,
+      secondsTimer: 0,
+      seconds: 60,
     }
   },
   watch: {
@@ -68,6 +78,28 @@ export default {
         }, 500)
       }
     },
+  },
+  mounted() {
+    this.startSeconds()
+  },
+  methods: {
+    startSeconds() {
+      const timeout = 1000
+
+      this.secondsTimer = setInterval(() => {
+        if (this.seconds != 0) {
+          this.seconds = this.seconds - 1
+        }
+      }, timeout)
+    },
+    resetSeconds() {
+      clearInterval(this.secondsTimer)
+      this.seconds = 60
+      this.startSeconds()
+    },
+  },
+  unmounted() {
+    clearInterval(this.secondsTimer)
   },
 }
 </script>
