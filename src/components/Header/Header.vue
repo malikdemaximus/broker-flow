@@ -16,7 +16,7 @@
       <img src="../../assets/images/logo.png" alt="Лого" />
     </div>
     <div class="partner-logo">
-      <img src="../../assets/images/partner-logo.png" alt="Лого" />
+      <img src="../../assets/images/partner-logo.png" alt="Лого партнера" />
     </div>
   </header>
 </template>
@@ -26,6 +26,7 @@ import { i18n } from '@/i18n'
 
 export default {
   name: 'Header',
+  props: ['order', 'step'],
   data() {
     return {
       i18n,

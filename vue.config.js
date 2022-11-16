@@ -23,12 +23,12 @@ module.exports = {
   devServer: {
     proxy: {
       '/bg-merchant-offer': {
-        target: 'https://sapi.airbapay.kz/bg-merchant-offer/api/v1/',
+        target: 'https://sapi.airbapay.kz',
         changeOrigin: true,
         logLevel: 'debug',
       },
       '/bg-agree': {
-        target: 'https://sapi.airbapay.kz/bg-agree/api/v1/',
+        target: 'https://sapi.airbapay.kz',
         changeOrigin: true,
         logLevel: 'debug',
       },

@@ -60,6 +60,13 @@ export const common = {
   resendAfter: 'Қайта жіберу',
   afterSec: 'кейін',
   offersTitle: 'Серіктестердің ұсыныстары',
+  offersForYou: 'Сіз үшін тамаша ұсыныстар',
+  displayFilter: 'Көрсету',
+  typeCredit: 'Несие түрі',
+  byBank: 'Банктер арқылы',
+  byTerm: 'Мерзімі бойынша',
+  allOffers: 'Барлық ұсыныстар',
+  all: 'Барлық',
   paymentMethod: {
     title: 'Төлем әдістері',
     byCard: {

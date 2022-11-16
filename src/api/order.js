@@ -5,8 +5,8 @@ const baseUrl = '/api/v1'
 
 export const orderInfo = async () => {
   const res = await GET(baseUrl + '/order')
-  if (!res.ok) {
-    throw Error(res.statusText)
-  }
+  // if (!res.ok) {
+  //   throw Error(res.statusText)
+  // }
   return res
 }

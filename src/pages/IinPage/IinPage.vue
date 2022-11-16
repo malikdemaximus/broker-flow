@@ -4,7 +4,7 @@
       <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
       <div class="amount-info">
         <p>{{ $t('common.purchaseAmount') }}</p>
-        <b> 140 400 ₸</b>
+        <b> {{ numberWithSpaces(order?.amount) }} ₸</b>
       </div>
       <label
         for="inp"
@@ -39,9 +39,22 @@
         <span>{{ $t('common.continue') }}</span>
       </button>
       <div class="partners-content">
-        <b>Наши партнеры</b>
-        <p>Выгодные предложения для вас</p>
-        <div class="partners"></div>
+        <b>{{ $t('common.ourPartners') }}</b>
+        <p>{{ $t('common.offersForYou') }}</p>
+        <div class="partners">
+          <div class="logo-partner">
+            <img src="../../assets/logos/airba.png" />
+          </div>
+          <div class="logo-partner">
+            <img src="../../assets/logos/halyk.png" />
+          </div>
+          <div class="logo-partner">
+            <img src="../../assets/logos/freedom.png" />
+          </div>
+          <div class="logo-partner">
+            <img src="../../assets/logos/eurasian.png" />
+          </div>
+        </div>
       </div>
     </form>
   </div>
@@ -51,6 +64,7 @@
 import { checkInnShort } from '../../utils'
 export default {
   name: 'IinPage',
+  props: ['order'],
   data() {
     return {
       iin: null,
@@ -78,6 +92,11 @@ export default {
     onSubmit() {
       this.$emit('changeStep', 2)
     },
+    numberWithSpaces(x) {
+      if (x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+      } else return x
+    },
   },
 }
 </script>
@@ -96,6 +115,40 @@ export default {
 
 .partners-content {
   margin-top: 24px;
+  b {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 24px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.partners {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.logo-partner {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  border: 1px solid #e6e9fa;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 88px;
+  }
 }
 
 .btn-iin {

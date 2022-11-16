@@ -30,6 +30,7 @@ export default {
 .offers-title {
   display: flex;
   align-items: center;
+  margin-bottom: 24px;
   img {
     width: 32px;
     margin-right: 8px;

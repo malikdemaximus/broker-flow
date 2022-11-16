@@ -59,6 +59,13 @@ export const common = {
   resend: 'Отправить повторно',
   offersTitle: 'Предложения от партнеров',
   afterSec: '',
+  offersForYou: 'Выгодные предложения для вас',
+  displayFilter: 'Отобразить',
+  byBank: 'По банкам',
+  byTerm: 'По сроку',
+  typeCredit: 'Тип кредитования',
+  allOffers: 'Все предложения',
+  all: 'Все',
   paymentMethod: {
     title: 'Способы оплаты',
     byCard: {

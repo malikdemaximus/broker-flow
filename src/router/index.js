@@ -14,6 +14,14 @@ export const routes = [
     },
   },
   {
+    path: '/:token',
+    name: 'TokenPage',
+    component: MainPage,
+    meta: {
+      name: i18n.global.t('content.roles'),
+    },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound,

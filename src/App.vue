@@ -4,9 +4,9 @@
       <Requester>
         <a-layout id="app" class="app">
           <a-layout class="nav-layout">
-            <Header />
+            <Header :order="order" :step="step" />
             <a-layout-content class="app__content">
-              <router-view />
+              <router-view @order="getOrder(order)" @step="step" />
             </a-layout-content>
           </a-layout>
         </a-layout>
@@ -28,6 +28,20 @@ export default defineComponent({
     ErrorBoundary,
     Requester,
   },
+
+  data() {
+    return {
+      order: null,
+      step: null,
+    }
+  },
+
+  methods: {
+    getOrder(order) {
+      this.order = order
+    },
+  },
+
   setup() {
     const isCollapsed = ref(false)
     const isOpened = ref(false)
@@ -40,10 +54,6 @@ export default defineComponent({
         route.name !== 'ChangePassword' &&
         //route.name !== 'DisabledMerchant' &&
         Boolean(route.name),
-    )
-
-    const isDisabledMerchantPage = computed(
-      () => route.name !== 'DisabledMerchant' && Boolean(route.name),
     )
 
     const onTriggerClick = () => {
@@ -74,7 +84,6 @@ export default defineComponent({
       locale,
       toggleNavbar,
       isMobile,
-      isDisabledMerchantPage,
       t,
     }
   },

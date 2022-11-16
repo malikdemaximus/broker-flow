@@ -7,7 +7,9 @@
       :key="el + ind"
       v-model="digits[ind]"
       :autofocus="ind === 0"
-      :placeholder="'•'"
+      @focus="handleFocus(ind)"
+      @blur="handleBlur()"
+      :placeholder="placeholders[ind]"
       maxlength="1"
       @keydown="handleKeyDown($event, ind)"
       :class="{
@@ -39,6 +41,7 @@ const props = defineProps({
 })
 
 const digits = reactive([])
+let placeholders = reactive(['•', '•', '•', '•'])
 
 if (props.default && props.default.length === props.digitCount) {
   for (let i = 0; i < props.digitCount; i++) {
@@ -77,23 +80,39 @@ const handleKeyDown = function (event, index) {
     if (index != 0) {
       otpCont.value.children[index - 1].focus()
     }
-
+    emit('update:otp', digits.join(''))
     return
   }
 
   if (new RegExp('^([0-9])$').test(event.key)) {
     digits[index] = event.key
 
-    if (index != props.digitCount - 1) {
+    if (index < props.digitCount - 1) {
       otpCont.value.children[index + 1].focus()
     }
+    // else if (index == props.digitCount - 1) {
+    //   otpCont.value.children[index].focus()
+    // }
+
     emit('update:otp', digits.join(''))
   }
 }
-// const handleChange = function () {
-//   console.log('uau')
-//   emit('update:otp', digits.join(''))
-// }
+
+const handleFocus = function (index) {
+  for (let i = 0; i < placeholders.length; i++) {
+    if (index === i) {
+      placeholders[i] = ''
+    } else {
+      placeholders[i] = '•'
+    }
+  }
+}
+
+const handleBlur = function () {
+  for (let i = 0; i < placeholders.length; i++) {
+    placeholders[i] = '•'
+  }
+}
 </script>
 
 <style lang="scss">
@@ -110,6 +129,7 @@ const handleKeyDown = function (event, index) {
   border-radius: 4px;
   text-align: center;
   outline: none;
+  padding-top: 5px;
   padding-bottom: 5px;
 
   :nth-child {
