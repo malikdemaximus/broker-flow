@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       orderInfo: null,
-      step: 3,
+      step: 1,
       tokenInfo: null,
       accessToken: null,
       errorText: null,
