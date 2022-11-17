@@ -1,39 +1,32 @@
 <template>
   <a-config-provider :locale="locale">
     <ErrorBoundary>
-      <Requester>
-        <a-layout id="app" class="app">
-          <a-layout class="nav-layout">
-            <Header :order="order" :step="step" />
-            <a-layout-content class="app__content">
-              <router-view @order="getOrder(order)" @step="step" />
-            </a-layout-content>
-          </a-layout>
+      <a-layout id="app" class="app">
+        <a-layout class="nav-layout">
+          <Header />
+          <a-layout-content class="app__content">
+            <router-view />
+          </a-layout-content>
         </a-layout>
-      </Requester>
+      </a-layout>
     </ErrorBoundary>
   </a-config-provider>
 </template>
 
 <script>
 import locale from 'ant-design-vue/es/locale/ru_RU'
-import { defineComponent, computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { Header, ErrorBoundary, Requester } from '@/components'
+import { defineComponent } from 'vue'
+import { Header, ErrorBoundary } from '@/components'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   components: {
     Header,
     ErrorBoundary,
-    Requester,
   },
 
   data() {
-    return {
-      order: null,
-      step: null,
-    }
+    return {}
   },
 
   methods: {
@@ -43,26 +36,7 @@ export default defineComponent({
   },
 
   setup() {
-    const isCollapsed = ref(false)
-    const isOpened = ref(false)
-    const route = useRoute()
     const { t } = useI18n()
-
-    const isInnerPage = computed(
-      () =>
-        route.name !== 'Login' &&
-        route.name !== 'ChangePassword' &&
-        //route.name !== 'DisabledMerchant' &&
-        Boolean(route.name),
-    )
-
-    const onTriggerClick = () => {
-      isCollapsed.value = !isCollapsed.value
-    }
-
-    const toggleNavbar = () => {
-      isOpened.value = !isOpened.value
-    }
 
     const isMobile = () => {
       if (
@@ -77,12 +51,7 @@ export default defineComponent({
     }
 
     return {
-      isInnerPage,
-      onTriggerClick,
-      isCollapsed,
-      isOpened,
       locale,
-      toggleNavbar,
       isMobile,
       t,
     }

@@ -1,164 +1,122 @@
 <template>
-  <div ref="otpCont" class="otp-content">
-    <input
-      type="text"
-      class="digit-box"
-      v-for="(el, ind) in digits"
-      :key="el + ind"
-      v-model="digits[ind]"
-      :autofocus="ind === 0"
-      :placeholder="'•'"
-      maxlength="1"
-      @keydown="handleKeyDown($event, ind)"
-      :class="{
-        bounce: digits[ind] !== null,
-        success: correctOtp,
-        'incorrect-otp': incorrectOtp,
-      }"
-    />
+  <div class="offer-wrapper">
+    <div class="offer-content">
+      <div class="offer-header">
+        <div class="offer-header-left">
+          <img
+            class="bank-logo"
+            src="../../assets/logos/halyk-offer.png"
+            alt=""
+          />
+          <img
+            class="arrow-icon"
+            src="../../assets/icons/arrow-icon.png"
+            alt=""
+          />
+        </div>
+        <div class="offer-header-right">
+          <img
+            src="../../assets/icons/checked-icon.png"
+            class="checked-icon"
+            alt=""
+          />
+          <span class="offer-count">3 предложения</span>
+        </div>
+      </div>
+      <div class="offer-items">
+        <div class="offer-item">
+          <span class="loan-type">Рассрочка</span>
+          <span class="loan-month">24 мес</span>
+          <span class="loan-term"><b>4 840 ₸</b> / мес</span>
+        </div>
+        <div class="offer-item">
+          <span class="loan-type">Рассрочка</span>
+          <span class="loan-month">12 мес</span>
+          <span class="loan-term"><b>5 232 ₸</b> / мес</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script>
 import { i18n } from '@/i18n'
-import { ref, reactive, defineProps, defineEmit, watch } from 'vue'
-
-const props = defineProps({
-  default: String,
-
-  digitCount: {
-    type: Number,
-    required: true,
-  },
-  incorrectOtp: {
-    type: Boolean,
-  },
-  correctOtp: {
-    type: Boolean,
-  },
-})
-
-const digits = reactive([])
-
-if (props.default && props.default.length === props.digitCount) {
-  for (let i = 0; i < props.digitCount; i++) {
-    digits[i] = props.default.charAt(i)
-  }
-} else {
-  for (let i = 0; i < props.digitCount; i++) {
-    digits[i] = null
-  }
+export default {
+  name: 'Offer',
 }
-
-const otpCont = ref(null)
-const emit = defineEmit(['update:otp'])
-
-const isDigitsFull = function () {
-  for (const elem of digits) {
-    if (elem == null || elem == undefined) {
-      return false
-    }
-  }
-
-  return true
-}
-const handleKeyDown = function (event, index) {
-  if (
-    event.key !== 'Tab' &&
-    event.key !== 'ArrowRight' &&
-    event.key !== 'ArrowLeft'
-  ) {
-    event.preventDefault()
-  }
-
-  if (event.key === 'Backspace') {
-    digits[index] = null
-
-    if (index != 0) {
-      otpCont.value.children[index - 1].focus()
-    }
-
-    return
-  }
-
-  if (new RegExp('^([0-9])$').test(event.key)) {
-    digits[index] = event.key
-
-    if (index != props.digitCount - 1) {
-      otpCont.value.children[index + 1].focus()
-    }
-    emit('update:otp', digits.join(''))
-  }
-}
-// const handleChange = function () {
-//   console.log('uau')
-//   emit('update:otp', digits.join(''))
-// }
 </script>
 
 <style lang="scss">
-.digit-box {
-  width: 64px;
-  height: 64px;
-  display: inline-block;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 56px;
-  margin: 4px;
-  font-size: 3rem;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  text-align: center;
-  outline: none;
-  padding-bottom: 5px;
+.offer-wrapper {
+  background: #f3f4fb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  width: 100%;
 
-  :nth-child {
+  .offer-header,
+  .offer-header-left,
+  .offer-header-right {
     display: flex;
     align-items: center;
   }
-}
 
-.otp-content {
-  .digit-box:focus {
-    border: 1px solid #319cf3;
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  .offer-header {
+    margin-bottom: 24px;
+    justify-content: space-between;
   }
 
-  .success {
-    border: 1px solid #1ace37;
-    box-shadow: 0px 4px 12px rgba(26, 206, 55, 0.5);
+  .bank-logo {
+    width: 128px;
+    margin-right: 16px;
   }
 
-  .incorrect-otp {
-    border: 1px solid #f15515;
-    box-shadow: 0px 4px 12px rgba(241, 85, 21, 0.2);
+  .arrow-icon {
+    width: 32px;
+  }
+  .checked-icon {
+    width: 32px;
   }
 
-  .bounce {
-    animation: pulse 0.3s ease-in-out alternate;
-  }
-
-  ::placeholder {
-    color: #787e9e;
-    opacity: 1; /* Firefox */
-  }
-
-  :-ms-input-placeholder {
-    color: #787e9eed;
-  }
-
-  ::-ms-input-placeholder {
-    color: #787e9e;
+  .offer-count {
+    font-size: 16px;
+    line-height: 24px;
+    margin-left: 16px;
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
+.offer-items {
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.offer-item {
+  background: #ffffff;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 16px;
+
+  .loan-type {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 28px;
   }
 
-  100% {
-    transform: scale(1.1);
+  .loan-month {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .loan-term {
+    background: #ffee57;
+    border-radius: 4px;
+    padding: 2px 8px;
   }
 }
 </style>

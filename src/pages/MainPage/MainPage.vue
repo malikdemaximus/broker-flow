@@ -36,20 +36,30 @@ export default {
     this.accessToken = localStorage.getItem('accessToken')
     this.tokenInfo = this.parseJwt(this.accessToken)
   },
-  // async mounted() {
-  //   const res = await orderInfo()
-  //   if (!res.success) {
-  //     this.step = 0
-  //     this.errorText = res.data?.error?.message
-  //   } else {
-  //     this.orderInfo = res.data
-  //     this.$emit('order', this.orderInfo)
-  //     this.$emit('step', this.step)
-  //     if (this.tokenInfo?.agreement) {
-  //       this.step = 1
-  //     }
-  //   }
-  // },
+  async mounted() {
+    this.emitter.on('step', (step) => {
+      this.step = step
+    })
+    const res = await orderInfo()
+    if (!res.success) {
+      this.step = 0
+      this.errorText = res.data?.error?.message
+    } else {
+      this.orderInfo = res.data
+      this.emitter.emit('order', this.orderInfo)
+      this.emitter.emit('tokenInfo', this.tokenInfo)
+      if (this.tokenInfo?.agreement) {
+        this.step = 1
+      } else {
+        this.step = 3
+      }
+    }
+  },
+  watch: {
+    step(newStep) {
+      this.emitter.emit('step', newStep)
+    },
+  },
   methods: {
     changeStep(st) {
       this.step = st

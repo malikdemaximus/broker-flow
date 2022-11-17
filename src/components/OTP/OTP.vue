@@ -23,8 +23,7 @@
 
 <script setup>
 import { i18n } from '@/i18n'
-import { ref, reactive, defineProps, defineEmit, watch } from 'vue'
-
+import { ref, reactive, defineProps, defineEmits, watch } from 'vue'
 const props = defineProps({
   default: String,
 
@@ -54,7 +53,7 @@ if (props.default && props.default.length === props.digitCount) {
 }
 
 const otpCont = ref(null)
-const emit = defineEmit(['update:otp'])
+const emit = defineEmits(['update:otp'])
 
 const isDigitsFull = function () {
   for (const elem of digits) {

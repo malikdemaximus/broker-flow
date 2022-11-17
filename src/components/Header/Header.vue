@@ -8,7 +8,7 @@
     </div>
   </a-layout-header> -->
   <header class="header">
-    <a class="back-content">
+    <a class="back-content" @click="changeStep()">
       <img src="../../assets/images/left-arrow.png" alt="назад" />
       <span>{{ $t('common.goBack') }}</span>
     </a>
@@ -16,7 +16,7 @@
       <img src="../../assets/images/logo.png" alt="Лого" />
     </div>
     <div class="partner-logo">
-      <img src="../../assets/images/partner-logo.png" alt="Лого партнера" />
+      <img :src="order?.merchantInfo?.logo" alt="Лого партнера" />
     </div>
   </header>
 </template>
@@ -26,20 +26,36 @@ import { i18n } from '@/i18n'
 
 export default {
   name: 'Header',
-  props: ['order', 'step'],
   data() {
     return {
       i18n,
+      order: null,
+      step: null,
+      tokenInfo: null,
     }
   },
   components: {},
-  props: {
-    isCollapsed: Boolean,
-    onTriggerClick: Function,
+  mounted() {
+    this.emitter.on('step', (step) => {
+      this.step = step
+    })
+    this.emitter.on('order', (order) => {
+      this.order = order
+    })
+    this.emitter.on('tokenInfo', (tokenInfo) => {
+      this.tokenInfo = tokenInfo
+    })
   },
   methods: {
-    async onLogout() {
-      await this.$router.push('/login')
+    changeStep() {
+      if (this.step === 2) {
+        this.emitter.emit('step', 1)
+      }
+      if (this.tokenInfo?.agreement && this.step === 3) {
+        this.emitter.emit('step', 2)
+      } else {
+        window.location.href = this.order.redirectUrl
+      }
     },
     changeLocale() {
       localStorage.setItem('locale', i18n.global.locale)

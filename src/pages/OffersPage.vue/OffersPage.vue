@@ -6,15 +6,20 @@
         <h3 class="title">{{ $t('common.offersTitle') }}</h3>
       </div>
       <offers-filter />
+      <div class="offers-show">
+        <offer />
+        <offer />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import OffersFilter from '../../components/OffersFilter/OffersFilter.vue'
+import Offer from '../../components/Offer/Offer.vue'
 export default {
   name: 'OffersPage',
-  components: { OffersFilter },
+  components: { OffersFilter, Offer },
   data() {
     return {}
   },
@@ -35,5 +40,9 @@ export default {
     width: 32px;
     margin-right: 8px;
   }
+}
+
+.offers-show {
+  margin-top: 8px;
 }
 </style>
