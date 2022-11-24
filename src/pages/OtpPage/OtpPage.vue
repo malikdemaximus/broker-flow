@@ -15,7 +15,7 @@
         {{ agreementText.slice(0, agreementText.indexOf('Публичной оферте')) }}
         <a href="https://static-data.object.pscloud.io/docs/broker_agreement.pdf" target="_blank">{{
             agreementText.slice(agreementText.indexOf('Публичной оферте'), agreementText.indexOf('и подписываю'))
-        }}</a>
+        }}</a> и подписываю
         <a href="">Согласие на сбор и обработку персональных данных</a>
       </p>
       <button :disabled="seconds !== 0" class="default-button" @click="resetSeconds()">
