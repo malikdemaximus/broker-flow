@@ -1,4 +1,5 @@
 @import "lib";
+@import "reset";
 @import "custom-spacing";
 @import "common";
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
@@ -14,13 +15,19 @@
   color: #2c3e50;
 }
 
+html {
+  scroll-behavior: smooth
+}
+
 p, h1, h2, h3, h4, h5 {
   margin: 0;
   color: #10142D;
+  line-height: normal;
 }
 
-span {
-  display: block;
+p, input {
+  line-height: 24px;
+  box-sizing: border-box;
 }
 
 .app {

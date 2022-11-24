@@ -1,8 +1,8 @@
 export const common = {
   welcome: 'Welcome to the tutorial RU',
   backToMain: 'Назад на сайт',
-  backToShop: 'Вернуться в магазин',
-  goBack: 'вернуться назад',
+  backToShop: 'Вернуться к магазину',
+  goBack: 'Вернуться назад',
   choiceLoan: 'Выберите условия для кредита',
   installment: 'Рассрочка',
   loan: 'Кредит',
@@ -66,6 +66,15 @@ export const common = {
   typeCredit: 'Тип кредитования',
   allOffers: 'Все предложения',
   all: 'Все',
+  loadOffers: 'Загрузка предложений',
+  noOffers: 'Предложений нет',
+  offers: 'предложения',
+  weSelectOffers: 'Подбираем предложения от наших партнеров',
+  notForYou: 'Для вас сейчас нет предложений',
+  payWithCard:
+    'Оплатите заказ картой или попробуйте получить предложения по кредиту и рассрочке в другой раз',
+  noOffersText:
+    'К сожалению, у этого партнера нет для вас предложений. Выберите другого',
   paymentMethod: {
     title: 'Способы оплаты',
     byCard: {

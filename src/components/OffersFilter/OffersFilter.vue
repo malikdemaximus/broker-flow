@@ -22,26 +22,10 @@
         <span class="filters-title">{{ $t('common.ourPartners') }}</span>
         <div class="filters-content">
           <filter-item :text="$t('common.all')" :active="true" size="m" />
-          <filter-item
-            text="Halyk Bank"
-            :image="'../../assets/logos/halyk-mini.png'"
-            size="m"
-          />
-          <filter-item
-            text="Airba Pay"
-            image="../../assets/logos/airba-mini.png"
-            size="m"
-          />
-          <filter-item
-            text="Freedom Finance"
-            image="../../assets/logos/freedom-mini.png"
-            size="m"
-          />
-          <filter-item
-            text="Eurasian Bank"
-            image="../../assets/logos/eura-mini.png"
-            size="m"
-          />
+          <filter-item text="Halyk Bank" :image="require(`@/assets/logos/halyk-mini.svg`)" size="m" />
+          <filter-item text="Airba Pay" :image="require(`@/assets/logos/airba-mini.svg`)" size="m" />
+          <filter-item text="Freedom Finance" :image="require(`@/assets/logos/freedom-mini.svg`)" size="m" />
+          <filter-item text="Eurasian Bank" :image="require(`@/assets/logos/eura-mini.svg`)" size="m" />
         </div>
       </div>
     </div>
@@ -85,6 +69,7 @@ export default {
 
 .filters-content {
   display: flex;
+
   :last-child {
     margin-right: 0;
   }

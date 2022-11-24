@@ -1,8 +1,10 @@
 import axiosConfig from './axiosConfig'
 
-const GET = async (url, params = {}, headers = {}, responseType = 'json') => {
+const GET = async (url, params = {}, headers = {}, baseURL) => {
+  const responseType = 'json'
   try {
     const response = await axiosConfig({
+      baseURL: baseURL || process.env.VUE_APP_BGM_API_URL,
       url,
       method: 'GET',
       params,
@@ -29,9 +31,10 @@ const GET = async (url, params = {}, headers = {}, responseType = 'json') => {
   }
 }
 
-const POST = async (url, data = {}, headers = {}) => {
+const POST = async (url, data = {}, headers = {}, baseURL) => {
   try {
     const response = await axiosConfig({
+      baseURL: baseURL || process.env.VUE_APP_BGM_API_URL,
       url,
       method: 'POST',
       data,
@@ -57,9 +60,10 @@ const POST = async (url, data = {}, headers = {}) => {
   }
 }
 
-const PUT = async (url, data = {}, headers = {}) => {
+const PUT = async (url, data = {}, headers = {}, baseURL) => {
   try {
     const response = await axiosConfig({
+      baseURL: baseURL || process.env.VUE_APP_BGM_API_URL,
       url,
       method: 'PUT',
       data,
@@ -85,9 +89,10 @@ const PUT = async (url, data = {}, headers = {}) => {
   }
 }
 
-const DELETE = async (url, headers = {}) => {
+const DELETE = async (url, headers = {}, baseURL) => {
   try {
     const response = await axiosConfig({
+      baseURL: baseURL || process.env.VUE_APP_BGM_API_URL,
       url,
       method: 'DELETE',
       headers,

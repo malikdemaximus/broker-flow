@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 54px 24px 54px;
+  padding: 0 54px 0 54px;
+  height: 84px;
   background: #FFFFFF;
   box-shadow: 0px 8px 14px rgba(16, 20, 45, 0.05), 0px 3.87387px 9.86002px rgba(16, 20, 45, 0.08);
   z-index: 1;
@@ -17,6 +18,10 @@
     display: flex;
       justify-content: space-between;
       align-items: center;
+      background: #FFFFFF;
+      outline: none;
+      border: 0;
+      cursor: pointer;
 
       img {
         max-width: 24px;
@@ -38,6 +43,15 @@
   }
 
     .partner-logo {
-      width: 110px;
+      max-height: 84px;
+      width: auto;
+      min-height: 50px;
+      min-width: 100px;
+
+      img {
+        display: block;
+        width: 120px;
+        max-width: 250px;
+      }
     }
 }

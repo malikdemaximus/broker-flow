@@ -8,15 +8,15 @@
     </div>
   </a-layout-header> -->
   <header class="header">
-    <a class="back-content" @click="changeStep()">
-      <img src="../../assets/images/left-arrow.png" alt="назад" />
+    <button class="back-content" @click="changeStep()">
+      <img src="../../assets/images/left-arrow.svg" alt="назад" />
       <span>{{ $t('common.goBack') }}</span>
-    </a>
+    </button>
     <div class="logo">
-      <img src="../../assets/images/logo.png" alt="Лого" />
+      <img src="../../assets/images/logo.svg" alt="Лого" />
     </div>
-    <div class="partner-logo">
-      <img :src="order?.merchantInfo?.logo" alt="Лого партнера" />
+    <div class="partner-logo" :class="loading ? 'loading-line' : ''">
+      <img v-if="order?.merchantInfo?.logo" :src="order?.merchantInfo?.logo" alt="Лого партнера" />
     </div>
   </header>
 </template>
@@ -32,6 +32,7 @@ export default {
       order: null,
       step: null,
       tokenInfo: null,
+      loading: false,
     }
   },
   components: {},
@@ -45,16 +46,22 @@ export default {
     this.emitter.on('tokenInfo', (tokenInfo) => {
       this.tokenInfo = tokenInfo
     })
+    this.emitter.on('loading', (loading) => {
+      this.loading = loading
+    })
   },
   methods: {
     changeStep() {
+      if (this.step === 0) {
+        history.back()
+      }
       if (this.step === 2) {
         this.emitter.emit('step', 1)
       }
       if (this.tokenInfo?.agreement && this.step === 3) {
         this.emitter.emit('step', 2)
       } else {
-        window.location.href = this.order.redirectUrl
+        history.back()
       }
     },
     changeLocale() {

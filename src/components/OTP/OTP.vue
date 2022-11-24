@@ -1,23 +1,15 @@
 <template>
-  <div ref="otpCont" class="otp-content">
-    <input
-      type="text"
-      class="digit-box"
-      v-for="(el, ind) in digits"
-      :key="el + ind"
-      v-model="digits[ind]"
-      :autofocus="ind === 0"
-      @focus="handleFocus(ind)"
-      @blur="handleBlur()"
-      :placeholder="placeholders[ind]"
-      maxlength="1"
-      @keydown="handleKeyDown($event, ind)"
+  <div ref="otpCont" :class="{
+    'otp-content': true,
+    'otp-content-incorrect': incorrectOtp,
+  }">
+    <input type="text" class="digit-box" v-for="(el, ind) in digits" :key="el + ind" v-model="digits[ind]"
+      :autofocus="ind === 0" :placeholder="placeholders[ind]" maxlength="1" @keydown="handleKeyDown($event, ind)"
       :class="{
         bounce: digits[ind] !== null,
         success: correctOtp,
         'incorrect-otp': incorrectOtp,
-      }"
-    />
+      }" />
   </div>
 </template>
 
@@ -97,21 +89,40 @@ const handleKeyDown = function (event, index) {
   }
 }
 
-const handleFocus = function (index) {
-  for (let i = 0; i < placeholders.length; i++) {
-    if (index === i) {
-      placeholders[i] = ''
-    } else {
-      placeholders[i] = '•'
-    }
+watch(() => props.incorrectOtp, (val) => {
+  if (val) {
+    setTimeout(() => {
+      for (let i = 0; i < props.digitCount; i++) {
+        digits[i] = ''
+      }
+      emit('update:otp', digits.join(''))
+    }, 500);
   }
-}
+})
 
-const handleBlur = function () {
-  for (let i = 0; i < placeholders.length; i++) {
-    placeholders[i] = '•'
+watch(digits, (val) => {
+  if (!val.join('')) {
+    setTimeout(() => {
+      otpCont.value.children[0].focus()
+    }, 100);
   }
-}
+})
+
+// const handleFocus = function (index) {
+//   for (let i = 0; i < placeholders.length; i++) {
+//     if (index === i) {
+//       placeholders[i] = ''
+//     } else {
+//       placeholders[i] = '•'
+//     }
+//   }
+// }
+
+// const handleBlur = function () {
+//   for (let i = 0; i < placeholders.length; i++) {
+//     placeholders[i] = '•'
+//   }
+// }
 </script>
 
 <style lang="scss">
@@ -130,6 +141,7 @@ const handleBlur = function () {
   outline: none;
   padding-top: 5px;
   padding-bottom: 5px;
+  caret-color: transparent;
 
   :nth-child {
     display: flex;
@@ -154,12 +166,13 @@ const handleBlur = function () {
   }
 
   .bounce {
-    animation: pulse 0.3s ease-in-out alternate;
+    animation: pulse 0.2s ease-in-out alternate;
   }
 
   ::placeholder {
     color: #787e9e;
-    opacity: 1; /* Firefox */
+    opacity: 1;
+    /* Firefox */
   }
 
   :-ms-input-placeholder {
@@ -171,13 +184,64 @@ const handleBlur = function () {
   }
 }
 
+.otp-content-incorrect {
+  animation: horizontal-shaking 0.5s;
+  //animation-iteration-count: infinite;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
   }
 
   100% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
+}
+
+@keyframes horizontal-shaking {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
 }
 </style>

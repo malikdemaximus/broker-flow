@@ -32,23 +32,29 @@
   background: #319CF3;
   border-radius: 8px;
   font-weight: 600;
+  height: 48px;
   font-size: 16px;
   line-height: 24px;
-  padding: 12px 22px;
   color: #FCFCFD;
   border: none;
   outline: none;
   width: 100%;
   transition: all .1s ease;
-  cursor: pointer
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.default-button:hover {
-  box-shadow: 0 6px 16px rgb(0 0 0 / 20%);
+.default-button:not([disabled]):hover {
+  background: #3BA3F7;
+  border: 1.5px solid #2188DB;
+  height: 48px;
 }
 
 .default-button:active {
-  box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  background: #73C0FF;
 }
 
 .default-button:disabled {
@@ -70,15 +76,20 @@
   border-radius: 8px;
 }
 
-.process-wrapper, .offers-wrapper {
+.process-wrapper, .offers-wrapper, .offers-loader, .no-offers-wrapper {
   padding-top: 56px;
   display: flex;
   justify-content: center;
+  align-items: baseline;
+}
+
+.offers-wrapper, .offers-loader, .no-offers-wrapper {
+  background-color: #fff;
+  min-height: calc(100vh - 84px);
 }
 
 .offers-wrapper {
-  background-color: #fff;
-  min-height: calc(100vh - 84px);
+  padding-bottom: 70px;
 }
 
 .offers-content {
@@ -90,4 +101,45 @@
   font-weight: 700;
   font-size: 24px;
   line-height: 36px;
+}
+
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0
+  }
+
+  100% {
+    background-position: 468px 0
+  }
+}
+
+.animated-background {
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: #F6F6F6;
+  background: linear-gradient(to right, #F6F6F6 8%, #F0F0F0 18%, #F6F6F6 33%);
+  background-size: 800px 104px;
+  height: 96px;
+  position: relative;
+}
+
+.loading-line {
+  @extend .animated-background;
 }

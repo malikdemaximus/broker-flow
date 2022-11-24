@@ -5,36 +5,22 @@
       <div class="otp-info">
         <p>{{ $t('common.enterOtpCode') }} <b> +7 (777) 123-45-67</b></p>
       </div>
-      <div style="text-align: center">
-        <OTP
-          :digit-count="4"
-          :incorrectOtp="incorrectOtp"
-          :correctOtp="correctOtp"
-          @update:otp="otpValue = $event"
-        />
+      <div class="otp-numbers">
+        <OTP v-show="!loading" :digit-count="4" :incorrectOtp="incorrectOtp" :correctOtp="correctOtp"
+          @update:otp="otpValue = $event" />
+        <default-loader v-show="loading" size="middle" />
       </div>
-      <span v-if="incorrectOtp" class="error-otp"
-        >Проверьте, правильно ли введен код</span
-      >
+      <span v-if="incorrectOtp" class="error-otp">Проверьте, правильно ли введен код</span>
       <p class="agreement">
-        Вводя код, полученный мной в SMS-сообщении на мой абонентский номер
-        мобильной связи, подтверждаю, что присоединяюсь к
-        <a href=""
-          >Публичной оферте ТОО «Airba Pay» для физических лиц, Соглашению ТОО
-          «Airba FinTech»,</a
-        >
-        и подписываю
+        {{ agreementText.slice(0, agreementText.indexOf('Публичной оферте')) }}
+        <a href="https://static-data.object.pscloud.io/docs/broker_agreement.pdf" target="_blank">{{
+            agreementText.slice(agreementText.indexOf('Публичной оферте'), agreementText.indexOf('и подписываю'))
+        }}</a>
         <a href="">Согласие на сбор и обработку персональных данных</a>
       </p>
-      <button
-        :disabled="seconds !== 0"
-        class="default-button"
-        @click="resetSeconds()"
-      >
-        <span v-if="seconds !== 0"
-          >{{ $t('common.resendAfter') }} {{ seconds }} {{ $t('common.sec') }}
-          {{ $t('common.afterSec') }}</span
-        >
+      <button :disabled="seconds !== 0" class="default-button" @click="resetSeconds()">
+        <span v-if="seconds !== 0">{{ $t('common.resendAfter') }} {{ seconds }} {{ $t('common.sec') }}
+          {{ $t('common.afterSec') }}</span>
         <span v-else>{{ $t('common.resend') }}</span>
       </button>
     </div>
@@ -43,23 +29,28 @@
 
 <script>
 import OTP from '../../components/OTP/OTP.vue'
+import { verifyAgreementId, verifyAgreement } from '../../api/order'
+import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
 export default {
   name: 'OtpPage',
-  components: { OTP },
+  components: { OTP, DefaultLoader },
+  props: ['specification', 'iin', 'signAgreementId'],
   data() {
     return {
       otpValue: '',
-      correctOtpValue: '1111',
+      verificationId: null,
       incorrectOtp: false,
       correctOtp: false,
       secondsTimer: 0,
       seconds: 60,
+      loading: false,
     }
   },
   watch: {
-    otpValue(newOtpValue) {
+    async otpValue(newOtpValue) {
       if (newOtpValue.length === 4) {
-        if (this.correctOtpValue == newOtpValue) {
+        const isSmsCodeTrue = await this.verifySmsCode()
+        if (isSmsCodeTrue) {
           this.incorrectOtp = false
           this.correctOtp = true
         } else {
@@ -79,8 +70,14 @@ export default {
       }
     },
   },
+  computed: {
+    agreementText() {
+      return this.specification?.languages?.ru?.description
+    }
+  },
   mounted() {
     this.startSeconds()
+    this.verify()
   },
   methods: {
     startSeconds() {
@@ -91,6 +88,31 @@ export default {
           this.seconds = this.seconds - 1
         }
       }, timeout)
+    },
+    async verify() {
+      const configData = {
+        sign_agreement_id: this.signAgreementId,
+      }
+      const res = await verifyAgreementId(configData)
+      if (res.success) {
+        this.verificationId = res.data?.verification_id
+      }
+    },
+    async verifySmsCode() {
+      this.loading = true
+      const configData = {
+        verificationId: this.verificationId,
+        smsCode: this.otpValue,
+        iin: this.iin,
+      }
+      const res = await verifyAgreement(configData)
+      this.loading = false
+      if (res.success) {
+        return true
+      } else {
+        console.log(res)
+        return false
+      }
     },
     resetSeconds() {
       clearInterval(this.secondsTimer)
@@ -109,6 +131,12 @@ export default {
   margin-bottom: 24px;
   font-size: 15px;
   line-height: 24px;
+}
+
+.otp-numbers {
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .agreement {

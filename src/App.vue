@@ -5,7 +5,7 @@
         <a-layout class="nav-layout">
           <Header />
           <a-layout-content class="app__content">
-            <router-view />
+            <router-view :hello="'hello'" />
           </a-layout-content>
         </a-layout>
       </a-layout>
