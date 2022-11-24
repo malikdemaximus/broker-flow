@@ -40,19 +40,18 @@ export default {
     }
     this.accessToken = localStorage.getItem('accessToken')
     this.tokenInfo = this.parseJwt(this.accessToken)
-    if (this.tokenInfo?.agreement) {
+    if (this.tokenInfo?.agreement && this.step !== 2) {
       this.step = 1
     } else {
       this.step = 3
     }
   },
   async mounted() {
+    this.getOrderInfo()
+    this.getSpecificationInfo()
     this.emitter.on('step', (step) => {
       this.step = step
     })
-
-    this.getOrderInfo()
-    this.getSpecificationInfo()
   },
   watch: {
     step(newStep) {
