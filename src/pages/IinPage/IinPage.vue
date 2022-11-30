@@ -1,6 +1,6 @@
 <template>
   <div class="process-wrapper">
-    <form class="process-content" @submit="onSubmit">
+    <form class="process-content" @submit.prevent="onSubmit">
       <default-loader size="large" v-if="loading" />
       <div v-if="!loading" style="width: 100%;">
         <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
@@ -18,8 +18,9 @@
           <img src="../../assets/images/warn.svg" alt="Ошибка" />
           <span>{{ $t('common.paymentForm.iin.error') }}</span>
         </div>
-        <button :disabled="!allowContinue" class="default-button btn-iin" type="submit">
-          <span>{{ $t('common.continue') }}</span>
+        <button :disabled="!allowContinue || loadButton" class="default-button btn-iin" type="submit">
+          <loader v-if="loadButton" size="small" fillColor="#fff" strokeColor="rgba(255, 255, 255, 0.5)" />
+          <span v-else>{{ $t('common.continue') }}</span>
         </button>
         <div class="partners-content">
           <b>{{ $t('common.ourPartners') }}</b>
@@ -40,7 +41,6 @@
           </div>
         </div>
       </div>
-
     </form>
   </div>
 </template>
@@ -49,15 +49,17 @@
 import { checkInnShort } from '../../utils'
 import { agreement } from '../../api/order'
 import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
+import Loader from '../../components/Loader/Loader.vue'
 export default {
   name: 'IinPage',
   props: ['order', 'specification'],
-  components: { DefaultLoader },
+  components: { DefaultLoader, Loader },
   data() {
     return {
       iin: null,
       incorrectIin: false,
       loading: false,
+      loadButton: false,
     }
   },
   mounted() {
@@ -84,8 +86,10 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.loadButton = true
       this.$emit('iin', this.iin)
       this.agreementSign()
+      this.loadButton = false
     },
     async agreementSign() {
       const configData = {

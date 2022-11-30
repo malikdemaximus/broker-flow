@@ -3,7 +3,7 @@
     <div class="process-content">
       <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
       <div class="otp-info">
-        <p>{{ $t('common.enterOtpCode') }} <b> +7 (777) 123-45-67</b></p>
+        <p>{{ $t('common.enterOtpCode') }} <b> +7 {{ phoneNumber }}</b></p>
       </div>
       <div class="otp-numbers">
         <OTP v-show="!loading" :digit-count="4" :incorrectOtp="incorrectOtp" :correctOtp="correctOtp"
@@ -34,7 +34,7 @@ import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
 export default {
   name: 'OtpPage',
   components: { OTP, DefaultLoader },
-  props: ['specification', 'iin', 'signAgreementId'],
+  props: ['order', 'specification', 'iin', 'signAgreementId'],
   data() {
     return {
       otpValue: '',
@@ -73,6 +73,10 @@ export default {
   computed: {
     agreementText() {
       return this.specification?.languages?.ru?.description
+    },
+    phoneNumber() {
+      let x = this.order?.customer?.contact?.mobileNumber.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+      return '(' + x[1] + ') ' + x[2] + '-' + x[3] + '-' + x[4];
     }
   },
   mounted() {

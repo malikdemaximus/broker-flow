@@ -7,6 +7,7 @@ export const common = {
   installment: 'Рассрочка',
   loan: 'Кредит',
   month: 'мес',
+  monthes: 'месяцев',
   monthlyPayment: 'Ежемесячный платеж',
   saveSelection: 'Сохранить выбор',
   term: 'Срок',
@@ -19,6 +20,10 @@ export const common = {
   smsCode: 'SMS-код',
   enterSms: 'Введите SMS - код ',
   sendSms: 'Отправить SMS - код',
+  sureGoToStore: 'Вы уверены, что хотите вернуться к магазину?',
+  afterWillRemove: 'После возврата все данные будут утеряны',
+  yes: 'Да',
+  no: 'Нет',
   agreementText:
     // eslint-disable-next-line max-len
     'Вводя одноразовый код, полученный мной в SMS-сообщении по зарегистрированному на меня абонентскому номеру мобильной связи, подтверждаю, что присоединяюсь к Соглашению об использовании Сервисов Airba FinTech и подписываю Согласие на сбор и обработку персональных данных',

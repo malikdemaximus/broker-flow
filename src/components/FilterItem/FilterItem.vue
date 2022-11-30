@@ -1,25 +1,32 @@
 <template>
-  <div
-    :class="{ 'filter-item': true, active: active, middle: size == 'm' }"
-    @click="$emit('selected', true)"
-  >
+  <button :class="{ 'filter-item': true, active: selected === code, middle: size == 'm', disabled: disabled }"
+    :disabled="disabled" @click="handleClick()">
     <img v-if="image" :src="myImage" />
     <span>{{ text }}</span>
-  </div>
+  </button>
 </template>
 
 <script>
 export default {
   name: 'FilterItem',
-  props: ['text', 'image', 'active', 'size'],
+  props: ['text', 'type', 'code', 'selected', 'image', 'size', 'disabled'],
   data() {
-    return {}
+    return {
+      active: null,
+    }
   },
   computed: {
     myImage() {
       return this.image.toString()
     },
   },
+  methods: {
+    handleClick() {
+      if (!this.disabled) {
+        this.$emit('changeFilter', { type: this.type, code: this.code })
+      }
+    }
+  }
 }
 </script>
 
@@ -32,6 +39,8 @@ export default {
   margin-right: 8px;
   display: flex;
   align-items: center;
+  outline: none;
+  border: none;
 
   span {
     font-weight: 600;
@@ -44,13 +53,24 @@ export default {
     margin-right: 9px;
     width: 24px;
   }
-}
 
-.active {
-  background: #fff3c8;
-}
+  &.disabled {
+    background: #f3f4fb;
+    color: rgb(16 20 45/1);
+    opacity: .5;
+    cursor: default;
+  }
 
-.middle {
-  font-size: 15px;
+  &.active {
+    background: #fff3c8;
+  }
+
+  &:hover {
+    background: #fff3c8;
+  }
+
+  &.middle {
+    font-size: 15px;
+  }
 }
 </style>

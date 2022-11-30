@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { i18n } from '@/i18n'
 
 import NotFound from '@/pages/NotFound'
@@ -6,16 +6,16 @@ import MainPage from '@/pages/MainPage/MainPage'
 
 export const routes = [
   {
-    path: '/',
-    name: 'MainPage',
+    path: '/:token',
+    name: 'TokenPage',
     component: MainPage,
     meta: {
       name: i18n.global.t('content.roles'),
     },
   },
   {
-    path: '/:token',
-    name: 'TokenPage',
+    path: '/',
+    name: 'MainPage',
     component: MainPage,
     meta: {
       name: i18n.global.t('content.roles'),
@@ -33,7 +33,7 @@ export const routes = [
 ]
 
 const router = new createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 })
 

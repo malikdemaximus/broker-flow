@@ -4,8 +4,8 @@
     'otp-content-incorrect': incorrectOtp,
   }">
     <input type="text" class="digit-box" v-for="(el, ind) in digits" :key="el + ind" v-model="digits[ind]"
-      :autofocus="ind === 0" :placeholder="placeholders[ind]" maxlength="1" @keydown="handleKeyDown($event, ind)"
-      :class="{
+      :autofocus="ind === 0" :placeholder="placeholders[ind]" maxlength="1" @focus="handleFocus(ind)"
+      @blur="handleBlur()" @keydown="handleKeyDown($event, ind)" :class="{
         bounce: digits[ind] !== null,
         success: correctOtp,
         'incorrect-otp': incorrectOtp,
@@ -96,7 +96,7 @@ watch(() => props.incorrectOtp, (val) => {
         digits[i] = ''
       }
       emit('update:otp', digits.join(''))
-    }, 500);
+    }, 2000);
   }
 })
 
@@ -108,21 +108,21 @@ watch(digits, (val) => {
   }
 })
 
-// const handleFocus = function (index) {
-//   for (let i = 0; i < placeholders.length; i++) {
-//     if (index === i) {
-//       placeholders[i] = ''
-//     } else {
-//       placeholders[i] = '•'
-//     }
-//   }
-// }
+const handleFocus = function (index) {
+  for (let i = 0; i < placeholders.length; i++) {
+    if (index === i) {
+      placeholders[i] = ''
+    } else {
+      placeholders[i] = '•'
+    }
+  }
+}
 
-// const handleBlur = function () {
-//   for (let i = 0; i < placeholders.length; i++) {
-//     placeholders[i] = '•'
-//   }
-// }
+const handleBlur = function () {
+  for (let i = 0; i < placeholders.length; i++) {
+    placeholders[i] = '•'
+  }
+}
 </script>
 
 <style lang="scss">
@@ -134,14 +134,12 @@ watch(digits, (val) => {
   font-size: 40px;
   line-height: 56px;
   margin: 4px;
-  font-size: 3rem;
   border: 1px solid #cccccc;
   border-radius: 4px;
   text-align: center;
   outline: none;
   padding-top: 5px;
   padding-bottom: 5px;
-  caret-color: transparent;
 
   :nth-child {
     display: flex;
@@ -173,6 +171,7 @@ watch(digits, (val) => {
     color: #787e9e;
     opacity: 1;
     /* Firefox */
+    font-size: 3rem;
   }
 
   :-ms-input-placeholder {
@@ -186,7 +185,7 @@ watch(digits, (val) => {
 
 .otp-content-incorrect {
   animation: horizontal-shaking 0.5s;
-  //animation-iteration-count: infinite;
+  animation-iteration-count: 1;
 }
 
 @keyframes pulse {
@@ -200,48 +199,48 @@ watch(digits, (val) => {
 }
 
 @keyframes horizontal-shaking {
-    0% {
-        transform: translate(1px, 1px) rotate(0deg);
-      }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
 
-      10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-      }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
 
-      20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-      }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
 
-      30% {
-        transform: translate(3px, 2px) rotate(0deg);
-      }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
 
-      40% {
-        transform: translate(1px, -1px) rotate(1deg);
-      }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
 
-      50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-      }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
 
-      60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-      }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
 
-      70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-      }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
 
-      80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-      }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
 
-      90% {
-        transform: translate(1px, 2px) rotate(0deg);
-      }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
 
-      100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-      }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 </style>

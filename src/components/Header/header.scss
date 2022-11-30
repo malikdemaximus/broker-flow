@@ -43,15 +43,13 @@
   }
 
     .partner-logo {
-      max-height: 84px;
-      width: auto;
-      min-height: 50px;
-      min-width: 100px;
+      height: 46px;
+      width: 116px;
 
       img {
         display: block;
-        width: 120px;
-        max-width: 250px;
+        max-height: 46px;
+        max-width: 116px;
       }
     }
 }

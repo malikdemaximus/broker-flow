@@ -19,13 +19,16 @@
       <img v-if="order?.merchantInfo?.logo" :src="order?.merchantInfo?.logo" alt="Лого партнера" />
     </div>
   </header>
+  <go-back-modal v-if="showModal" @close="showModal = false" />
 </template>
 
 <script>
 import { i18n } from '@/i18n'
+import GoBackModal from '../GoBackModal'
 
 export default {
   name: 'Header',
+  components: { GoBackModal },
   data() {
     return {
       i18n,
@@ -33,9 +36,9 @@ export default {
       step: null,
       tokenInfo: null,
       loading: false,
+      showModal: false,
     }
   },
-  components: {},
   mounted() {
     this.emitter.on('step', (step) => {
       this.step = step
@@ -53,7 +56,7 @@ export default {
   methods: {
     changeStep() {
       if (this.step === 0) {
-        history.back()
+        this.showModal = true
       }
       if (this.step === 2) {
         this.emitter.emit('step', 1)
@@ -61,7 +64,7 @@ export default {
       if (this.tokenInfo?.agreement && this.step === 3) {
         this.emitter.emit('step', 2)
       } else {
-        history.back()
+        this.showModal = true
       }
     },
     changeLocale() {

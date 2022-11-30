@@ -3,7 +3,9 @@
     @changeSignAgreementId="changeSignAgreementId" @changeStep="changeStep" />
   <otp-page v-if="step === 2" :order="orderInfo" :iin="iin" :specification="specificationInfo" @changeStep="changeStep"
     :signAgreementId="signAgreementId" />
-  <offers-page v-if="step === 3" @changeStep="changeStep" :processed="processed" />
+  <offers-page v-if="step === 3" @changeStep="changeStep" :processed="processed" :loading="loadingOrder"
+    @redirectInfo="changeRedirectInfo" />
+  <redirect-page v-if="step === 4" @changeStep="changeStep" :redirectInfo="redirectInfo" />
   <errors-page v-if="step === 0" :errorText="errorText" @changeStep="changeStep" />
 </template>
 
@@ -11,12 +13,14 @@
 import IinPage from '../IinPage/IinPage.vue'
 import ErrorsPage from '../ErrorsPage/ErrorsPage.vue'
 import OffersPage from '../OffersPage.vue/OffersPage.vue'
+import RedirectPage from '../RedirectPage'
 import OtpPage from '../OtpPage'
+import GoBackModal from '../../components/GoBackModal'
 import { orderInfo, specification } from '../../api/order'
 
 export default {
   name: 'MainPage',
-  components: { IinPage, OtpPage, OffersPage, ErrorsPage },
+  components: { IinPage, OtpPage, OffersPage, ErrorsPage, RedirectPage, GoBackModal },
   props: ['hello'],
   data() {
     return {
@@ -28,6 +32,7 @@ export default {
       agreementInfo: null,
       specificationInfo: null,
       signAgreementId: null,
+      redirectInfo: null,
       loading: false,
       iin: null,
       processed: false,
@@ -42,8 +47,6 @@ export default {
     this.tokenInfo = this.parseJwt(this.accessToken)
     if (this.tokenInfo?.agreement && this.step !== 2) {
       this.step = 1
-    } else {
-      this.step = 3
     }
   },
   async mounted() {
@@ -73,8 +76,10 @@ export default {
         if (this.orderInfo.stateCode === 'processed') {
           this.processed = true
           this.step = 3
+        } if (!this.tokenInfo?.agreement) {
+          this.step = 3
         }
-        if (this.orderInfo.stateCode === 'cancelled') {
+        if (this.orderInfo.stateCode === 'cancelled' || this.orderInfo.stateCode === 'rejected') {
           this.errorText = 'Заявка была отменена'
           this.step = 0
         }
@@ -93,6 +98,9 @@ export default {
     },
     changeStep(st) {
       this.step = st
+    },
+    changeRedirectInfo(info) {
+      this.redirectInfo = info
     },
     changeSignAgreementId(sn) {
       this.signAgreementId = sn
