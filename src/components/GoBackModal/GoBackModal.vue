@@ -30,9 +30,10 @@
 <script>
 export default {
   name: 'GoBackModal',
+  props: ['redirectUrl'],
   methods: {
     goBack() {
-      history.back()
+      window.location.href = this.redirectUrl
       this.$emit('close')
     }
   }

@@ -19,7 +19,7 @@
       <img v-if="order?.merchantInfo?.logo" :src="order?.merchantInfo?.logo" alt="Лого партнера" />
     </div>
   </header>
-  <go-back-modal v-if="showModal" @close="showModal = false" />
+  <go-back-modal :redirectUrl="order?.redirectUrl" v-if="showModal" @close="showModal = false" />
 </template>
 
 <script>
