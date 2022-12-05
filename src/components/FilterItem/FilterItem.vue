@@ -73,4 +73,14 @@ export default {
     font-size: 15px;
   }
 }
+
+@media screen and (max-width: 769px) {
+  .filter-item {
+    margin-bottom: 8px;
+    width: 100%;
+    min-width: 300px;
+    text-align: center;
+    justify-content: center;
+  }
+}
 </style>

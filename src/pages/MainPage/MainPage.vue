@@ -1,12 +1,12 @@
 <template>
   <iin-page v-if="step === 1" :order="orderInfo" :specification="specificationInfo" @iin="(iinCode) => iin = iinCode"
-    @changeSignAgreementId="changeSignAgreementId" @changeStep="changeStep" />
+    @changeSignAgreementId="changeSignAgreementId" @changeStep="changeStep" :innerWidth="innerWidth" />
   <otp-page v-if="step === 2" :order="orderInfo" :iin="iin" :specification="specificationInfo" @changeStep="changeStep"
-    :signAgreementId="signAgreementId" />
-  <offers-page v-if="step === 3" @changeStep="changeStep" :processed="processed" :loading="loadingOrder"
-    @redirectInfo="changeRedirectInfo" />
-  <redirect-page v-if="step === 4" @changeStep="changeStep" :redirectInfo="redirectInfo" />
-  <errors-page v-if="step === 0" :errorText="errorText" @changeStep="changeStep" />
+    :signAgreementId="signAgreementId" :innerWidth="innerWidth" />
+  <offers-page v-if="step === 3" :order="orderInfo" @changeStep="changeStep" :processed="processed"
+    :loading="loadingOrder" @redirectInfo="changeRedirectInfo" :innerWidth="innerWidth" />
+  <redirect-page v-if="step === 4" @changeStep="changeStep" :redirectInfo="redirectInfo" :innerWidth="innerWidth" />
+  <errors-page v-if="step === 0" :errorText="errorText" @changeStep="changeStep" :innerWidth="innerWidth" />
 </template>
 
 <script>
@@ -21,7 +21,7 @@ import { orderInfo, specification } from '../../api/order'
 export default {
   name: 'MainPage',
   components: { IinPage, OtpPage, OffersPage, ErrorsPage, RedirectPage, GoBackModal },
-  props: ['hello'],
+  props: ['innerWidth'],
   data() {
     return {
       orderInfo: null,

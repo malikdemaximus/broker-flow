@@ -1,30 +1,41 @@
 <template>
   <offers-loader v-if="loading" />
-  <not-defained-offers-page v-if="notOffer" />
+  <not-defained-offers-page :innerWidth="innerWidth" :order="order" v-if="notOffer" />
   <div class="offers-wrapper" v-if="!loading && !notOffer" ref="offersWrapper">
-    <div class="offers-content">
-      <div class="offers-title">
-        <img src="../../assets/images/offer.svg" alt="Предложения" />
-        <h3 class="title">{{ $t('common.offersTitle') }}</h3>
+    <div :class="{ 'offers-content': true, 'offers-content-mobile': selected.offerId || loaded }">
+      <div class="header-nd-filter" v-if="(innerWidth < 769)">
+        <mobile-header :text="'common.decor'" :redirectUrl="order?.redirectUrl" />
+        <button class="ff" @click="showMobileFilter = true">{{ $t('common.filter') }}</button>
       </div>
-      <offers-filter :isInstallment="isInstallment" :isLoan="isLoan" :banks="banks" @changeFilter="changeFilter" />
-      <div class="offers-show">
-        <offer v-for="(offer, index) in collectedOffers" :selected="selected.offerId" @changeSelected="changeSelected"
-          :key="index" :offer="offer" :filterType="selectedFilterType" />
+
+      <div class="process-info">
+        <mobile-header-logos :order="order" v-if="(innerWidth < 769)" />
+        <div class="offers-title">
+          <img src="../../assets/images/offer.svg" alt="Предложения" />
+          <h3 class="title">{{ $t('common.offersTitle') }}</h3>
+        </div>
+        <offers-filter :isInstallment="isInstallment" :isLoan="isLoan" :banks="banks" @changeFilter="changeFilter"
+          :showMobileFilter="showMobileFilter" @changeMobileFilter="changeMobileFilter" :innerWidth="innerWidth" />
+        <div class="offers-show">
+          <offer v-for="(offer, index) in collectedOffers" :selected="selected.offerId" @changeSelected="changeSelected"
+            :key="index" :offer="offer" :filterType="selectedFilterType" :innerWidth="innerWidth" />
+        </div>
       </div>
     </div>
-  </div>
-  <div :class="{ 'fixed-block': true, 'normal-block': scrolled }">
-    <a href="#bottom" class="load-button" v-if="!loaded && !selected.offerId">
-      <loader size="small" />
-      <span>{{ $t('common.loadOffers') }}</span>
-      <img src="../../assets/icons/arrow-mini.png" class="arrow-mini" />
-    </a>
-    <button :class="{ 'default-button offers-button': true, 'load-default-button': loadingSaveNext }"
-      :disabled="!selected.offerId || loadingSaveNext" v-if="selected.offerId || loaded" @click="saveAndNext()">
-      <loader v-if="loadingSaveNext" size="small" fillColor="#fff" strokeColor="rgba(255, 255, 255, 0.5)" />
-      <span v-else>{{ $t('common.continue') }}</span>
-    </button>
+    <div :class="{ 'fixed-block': true, 'normal-block': scrolled }"
+      v-if="((innerWidth > 769) || selected.offerId || loaded)">
+      <a href="#bottom" class="load-button" v-if="!loaded && !selected.offerId">
+        <loader size="small" />
+        <span>{{ $t('common.loadOffers') }}</span>
+        <img src="../../assets/icons/arrow-mini.png" class="arrow-mini" />
+      </a>
+      <button :class="{ 'default-button offers-button': true, 'load-default-button': loadingSaveNext }"
+        :disabled="!selected.offerId || loadingSaveNext" v-if="selected.offerId || loaded" @click="saveAndNext()">
+        <loader v-if="loadingSaveNext" size="small" fillColor="#fff" strokeColor="rgba(255, 255, 255, 0.5)" />
+        <span v-else>{{ $t('common.continue') }}</span>
+      </button>
+    </div>
+
   </div>
   <div id="bottom"></div>
 </template>
@@ -35,11 +46,13 @@ import Offer from '../../components/Offer/Offer.vue'
 import Loader from '../../components/Loader/Loader.vue'
 import OffersLoader from '../../components/OffersLoader/OffersLoader.vue'
 import NotDefainedOffersPage from '../NotDefainedOffersPage.vue/NotDefainedOffersPage.vue'
+import MobileHeaderLogos from '../../components/MobileHeaderLogos/MobileHeaderLogos.vue'
+import MobileHeader from '../../components/MobileHeader/MobileHeader.vue'
 import { startProcess, offers, saveChosenOffer, orderInfo } from '../../api/order'
 export default {
   name: 'OffersPage',
-  props: ['processed', 'loadingOrder'],
-  components: { OffersFilter, Offer, Loader, OffersLoader, NotDefainedOffersPage },
+  props: ['processed', 'order', 'loadingOrder', 'innerWidth'],
+  components: { OffersFilter, Offer, Loader, OffersLoader, NotDefainedOffersPage, MobileHeaderLogos, MobileHeader },
   data() {
     return {
       scrolled: false,
@@ -48,6 +61,7 @@ export default {
       loadingSaveNext: false,
       offers: null,
       filteredOffers: null,
+      showMobileFilter: false,
       timer: null,
       bankcode: 'all',
       byCredit: 'all',
@@ -78,10 +92,13 @@ export default {
     }, 3000)
   },
   watch: {
-    // offers() {
-    //   this.filterByCredit(this.byCredit)
-    //   this.filterByBankcode(this.bankcode)
-    // }
+    showMobileFilter(val) {
+      if (val) {
+        document.body.className = 'offers-wrapper-o-hidden'
+      } else {
+        document.body.className = ''
+      }
+    }
   },
   unmounted() {
     clearInterval(this.timer)
@@ -156,6 +173,9 @@ export default {
         this.selectedFilterType = filter.code
       }
       this.doFilter()
+    },
+    changeMobileFilter() {
+      this.showMobileFilter = false
     },
     doFilter() {
       if (this.filteredOffers && this.filteredOffers.length) {
@@ -322,5 +342,56 @@ export default {
 
 .to-bottom {
   position: relative;
+}
+
+.header-nd-filter,
+.offers-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .ff {
+    color: #319CF3;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    background: #fff;
+    outline: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+.header-nd-filter .ff {
+  padding-right: 16px;
+}
+
+
+@media screen and (max-width: 769px) {
+  .offers-content-mobile {
+    padding-bottom: 50px;
+  }
+
+  .offers-show {
+    margin-top: 0;
+  }
+
+  .offers-button {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .offers-title {
+    .title {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
 }
 </style>

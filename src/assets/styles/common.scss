@@ -101,10 +101,19 @@
   align-items: baseline;
 }
 
+.process-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 494px;
+}
+
 .offers-wrapper, .offers-loader, .no-offers-wrapper {
   background-color: #fff;
   min-height: calc(100vh - 84px);
 }
+
 
 .offers-wrapper {
   padding-bottom: 70px;
@@ -161,4 +170,132 @@
 
 .loading-line {
   @extend .animated-background;
+}
+
+@media screen and (max-width: 769px) {
+
+  .process-wrapper,
+    .offers-wrapper,
+    .offers-loader,
+    .no-offers-wrapper,
+    .no-offers-wrapper {
+      padding-top: 0;
+    }
+
+  p {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
+.offers-wrapper,
+  .offers-loader,
+  .no-offers-wrapper {
+    background-color: #fff;
+    min-height: 100vh;
+  }
+
+    .offers-wrapper {
+      padding-bottom: 0;
+    }
+
+  .offers-wrapper-o-hidden {
+    overflow: hidden;
+  }
+
+    .default-button, .offers-button {
+      width: 100%;
+    }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 16px;
+    width: 100%;
+
+    .mobile-back {
+      background-color: #fff;
+      outline: none;
+      border: none;
+      padding: 0;
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 16px;
+    }
+  }
+
+  .mobile-header-logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 24px;
+
+    .mobile-header-logo-airba {
+      width: 117px;
+      max-height: 32px;
+    }
+
+    .mobile-header-logo-partner {
+      max-width: 80px;
+      max-height: 32px;
+    }
+  }
+
+  .offers-wrapper, .no-offers-wrapper {
+    .mobile-header-logos {
+      padding-top: 16px;
+      padding-bottom: 24px;
+    }
+  }
+
+    .process-content {
+      padding: 0;
+      background: #F3F4FB;
+      box-shadow: none;
+      border-radius: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .process-info {
+      padding: 0 16px 24px 16px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .mobile-btn {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      right: 16px;
+      margin: 0 auto;
+      width: auto;
+      max-width: 540px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width:960px) {
+  .offers-content {
+    width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+    .process-info {
+      padding: 0;
+    }
+
+    .header {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
 }

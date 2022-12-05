@@ -1,7 +1,7 @@
 <template>
   <div class="offer-wrapper">
     <div class="offer-content">
-      <div class="offer-header" :class="{ 'offer-header': true, 'zero-margin': !opened }">
+      <div :class="{ 'offer-header': true, 'zero-margin': !opened }">
         <div class="offer-header-left" @click="toggleAccordion()">
           <img v-if="filterType === 'bank'" class="bank-logo" :src="getLogo()" alt="" />
           <h4 class="offer-header-title" v-if="filterType === 'term'">{{ offer[0].loanLength }} {{
@@ -18,11 +18,12 @@
           <span class="offer-count">{{ $t('common.noOffers') }}</span>
         </div>
         <div class="offer-header-right" v-if="init">
-          <loader size="middle" />
+          <loader size="middle" v-if="(innerWidth > 769)" />
+          <loader size="small" v-else />
           <span class="offer-count">{{ $t('common.loadOffers') }}</span>
         </div>
       </div>
-      <div :class="{ 'offer-items': true, closed: !opened }">
+      <div v-if="(innerWidth > 769)" :class="{ 'offer-items': true, closed: !opened }">
         <div @click="$emit('changeSelected', { id: o.id, code: o.partner.code, logo: getLogo() })"
           :class="{ 'offer-item': true, active: selected === o.id }" v-for="(o, index) in hasOffer" :key="index"
           v-if="showOffer">
@@ -32,6 +33,28 @@
           }}</span>
           <span class="loan-month" v-if="filterType === 'bank'">{{ o.loanLength }} {{ $t('common.month') }}</span>
           <span class="loan-term"><b>{{ numberWithSpaces(o.monthlyPayment) }} ₸</b> / {{ $t('common.month') }}</span>
+        </div>
+      </div>
+      <div v-if="(innerWidth < 769)" :class="{ 'offer-items': true, closed: !opened }">
+        <div @click="$emit('changeSelected', { id: o.id, code: o.partner.code, logo: getLogo() })"
+          :class="{ 'offer-item': true, active: selected === o.id }" v-for="(o, index) in hasOffer" :key="index"
+          v-if="showOffer">
+          <img v-if="filterType === 'term'" class="bank-logo-term" :src="getLogo()" alt="" />
+          <span v-if="filterType === 'bank'" :class="{ 'loan-type': true, 'loan-type-term': filterType === 'term' }">{{
+              o.productType === 'loan' ?
+                'Кредит' : 'Рассрочка'
+          }}</span>
+          <div class="offer-item-right">
+            <span v-if="filterType === 'term'"
+              :class="{ 'loan-type': true, 'loan-type-term': filterType === 'term' }">{{
+                  o.productType === 'loan' ?
+                    'Кредит' : 'Рассрочка'
+              }}</span>
+            <span class="loan-month" v-if="filterType === 'bank'"><b>{{ o.loanLength }}</b> {{
+                $t('common.month')
+            }}</span>
+            <span class="loan-term"><b>{{ numberWithSpaces(o.monthlyPayment) }} ₸</b> / {{ $t('common.month') }}</span>
+          </div>
         </div>
       </div>
       <div :class="{ 'offer-load': true, closed: !opened }" v-if="!showOffer && !notOffer">
@@ -56,7 +79,7 @@ import Loader from '../Loader/Loader.vue'
 export default {
   name: 'Offer',
   components: { Loader },
-  props: ['offer', 'selected', 'filterType'],
+  props: ['offer', 'selected', 'filterType', 'innerWidth'],
   data() {
     return {
       opened: true,
@@ -136,12 +159,14 @@ export default {
 
   .arrow-icon {
     width: 32px;
+    height: 32px;
     transition: .2s ease all;
   }
 
   .checked-icon,
   .x-icon {
     width: 32px;
+    height: 32px;
   }
 
   .offer-count {
@@ -263,5 +288,111 @@ export default {
 .bank-logo-term {
   max-width: 128px;
   max-height: 40px;
+}
+
+@media screen and (max-width: 769px) {
+
+  .offer-wrapper {
+    padding: 16px;
+    margin-bottom: 16px;
+
+    .offer-header {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-bottom: 0;
+    }
+
+    .offer-items {
+      margin-top: 16px;
+    }
+
+    .offer-header-title {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      margin-right: 0;
+    }
+
+    .bank-logo {
+      max-width: 104px;
+      max-height: 32px;
+      margin-right: 0;
+    }
+
+    .checked-icon,
+    .x-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .offer-count {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 22px;
+    }
+
+    .arrow-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .not-offer-content h3 {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 8px;
+  }
+
+  .not-offer-img {
+    width: 184px;
+    margin-bottom: 16px;
+  }
+
+
+
+  .offer-header-left {
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .offer-header-right {
+    align-items: flex-start;
+    margin-top: 16px;
+  }
+
+  .offer-item {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .offer-item-right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .bank-logo-term {
+      max-width: 104px;
+      max-height: 32px;
+    }
+
+    .loan-type {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .loan-month {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+    .loan-term {
+      line-height: 24px;
+    }
+  }
 }
 </style>

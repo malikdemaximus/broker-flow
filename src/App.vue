@@ -3,9 +3,9 @@
     <ErrorBoundary>
       <a-layout id="app" class="app">
         <a-layout class="nav-layout">
-          <Header />
+          <Header v-if="(innerWidth > 769)" />
           <a-layout-content class="app__content">
-            <router-view :hello="'hello'" />
+            <router-view :innerWidth="innerWidth" />
           </a-layout-content>
         </a-layout>
       </a-layout>
@@ -26,13 +26,28 @@ export default defineComponent({
   },
 
   data() {
-    return {}
+    return {
+      innerWidth: window.innerWidth,
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
   },
 
   methods: {
     getOrder(order) {
       this.order = order
     },
+    onResize() {
+      this.innerWidth = window.innerWidth
+    },
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.onResize)
   },
 
   setup() {

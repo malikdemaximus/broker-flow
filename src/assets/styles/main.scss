@@ -42,11 +42,16 @@ p, input {
       min-height: calc(100vh - 84px);
       margin: 0;
 
-      @media screen and (max-width: 600px) {
-        padding: 12px;
+      @media screen and (max-width: 769px) {
+        min-height: 100vh;
       }
 
       background: $white-bg;
     }
 }
 
+@media screen and (max-width: 769px) {
+  p {
+      line-height: 22px;
+    }
+}

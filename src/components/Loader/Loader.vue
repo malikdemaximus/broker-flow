@@ -17,7 +17,7 @@ export default {
 
 <style lang="scss">
 .svg-spin-small {
-  width: 22px;
+  width: 24px;
   z-index: 2;
 }
 

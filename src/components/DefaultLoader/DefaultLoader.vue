@@ -20,14 +20,18 @@ export default {
 
 <style lang="scss">
 .svg-spin-default-small {
+  margin: auto;
   width: 60px;
+  height: 100%;
 }
 
 .svg-spin-default-middle {
+  margin: auto;
   width: 120px;
 }
 
 .svg-spin-default-large {
+  margin: auto;
   width: 180px;
 }
 </style>

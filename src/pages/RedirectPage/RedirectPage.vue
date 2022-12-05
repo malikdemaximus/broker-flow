@@ -1,9 +1,12 @@
 <template>
-  <div class="offers-wrapper">
+  <div class="redirect-header" v-if="(innerWidth < 769)">
+    <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
+  </div>
+  <div class="offers-wrapper redirect-wrapper">
     <div class="redirect-content">
       <default-loader size="large" v-if="loading" />
       <div v-if="!loading">
-        <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
+        <h3 class="title" v-if="(innerWidth > 768)">{{ $t('common.loanProcessing') }}</h3>
         <div class="redirect-count">
           <span>{{ seconds }}</span>
         </div>
@@ -19,7 +22,7 @@
 import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
 export default {
   name: 'RedirectPage',
-  props: ['redirectInfo'],
+  props: ['redirectInfo', 'innerWidth'],
   components: { DefaultLoader },
   data() {
     return {
@@ -96,6 +99,38 @@ export default {
     &:hover {
       color: #fff;
     }
+  }
+}
+
+.redirect-header {
+  width: 100%;
+  padding: 16px;
+  background-color: #fff;
+
+  h3 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .redirect-content {
+    height: calc(100vh - 56px);
+    border-radius: 0;
+
+    .redirect-button {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      right: 16px;
+      width: auto;
+      max-width: 540px;
+    }
+  }
+
+  .redirect-wrapper {
+    min-height: calc(100vh - 56px);
   }
 }
 </style>

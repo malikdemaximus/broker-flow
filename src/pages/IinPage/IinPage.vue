@@ -1,42 +1,49 @@
 <template>
   <div class="process-wrapper">
     <form class="process-content" @submit.prevent="onSubmit">
-      <default-loader size="large" v-if="loading" />
+      <div class="process-loader" v-if="loading">
+        <default-loader size="large" />
+      </div>
       <div v-if="!loading" style="width: 100%;">
-        <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
-        <div class="amount-info">
-          <p>{{ $t('common.purchaseAmount') }}</p>
-          <b> {{ numberWithSpaces(order?.amount) }} ₸</b>
-        </div>
-        <label for="inp" :class="[{ inp: true, incorrectiin: incorrectIin, filled: iin }]">
-          <input type="text" id="inp" placeholder="&nbsp;" maxlength="12" v-model="iin" />
-          <span class="label">{{ $t('common.paymentForm.iin.label') }}</span>
-          <span class="focus-bg"></span>
-          <img v-if="iin" class="remove" src="../../assets/images/close.svg" alt="очистить" @click="iin = ''" />
-        </label>
-        <div class="error-iin" v-if="incorrectIin">
-          <img src="../../assets/images/warn.svg" alt="Ошибка" />
-          <span>{{ $t('common.paymentForm.iin.error') }}</span>
-        </div>
-        <button :disabled="!allowContinue || loadButton" class="default-button btn-iin" type="submit">
-          <loader v-if="loadButton" size="small" fillColor="#fff" strokeColor="rgba(255, 255, 255, 0.5)" />
-          <span v-else>{{ $t('common.continue') }}</span>
-        </button>
-        <div class="partners-content">
-          <b>{{ $t('common.ourPartners') }}</b>
-          <p>{{ $t('common.offersForYou') }}</p>
-          <div class="partners">
-            <div class="logo-partner">
-              <img src="../../assets/logos/airba.png" />
-            </div>
-            <div class="logo-partner">
-              <img src="../../assets/logos/halyk.png" />
-            </div>
-            <div class="logo-partner">
-              <img src="../../assets/logos/freedom.png" />
-            </div>
-            <div class="logo-partner">
-              <img src="../../assets/logos/eurasian.png" />
+        <mobile-header :text="'common.loanProcessing'" :redirectUrl="order?.redirectUrl" v-if="(innerWidth <= 769)" />
+        <div class="process-info">
+          <h3 class="title" v-if="(innerWidth > 769)">{{ $t('common.loanProcessing') }}</h3>
+          <mobile-header-logos :order="order" v-if="(innerWidth <= 769)" />
+          <div class="amount-info">
+            <p>{{ $t('common.purchaseAmount') }}</p>
+            <b> {{ numberWithSpaces(order?.amount) }} ₸</b>
+          </div>
+          <label for="inp" :class="[{ inp: true, incorrectiin: incorrectIin, filled: iin }]">
+            <input type="text" id="inp" placeholder="&nbsp;" maxlength="12" v-model="iin" />
+            <span class="label">{{ $t('common.paymentForm.iin.label') }}</span>
+            <span class="focus-bg"></span>
+            <img v-if="iin" class="remove" src="../../assets/images/close.svg" alt="очистить" @click="iin = ''" />
+          </label>
+          <div class="error-iin" v-if="incorrectIin">
+            <img src="../../assets/images/warn.svg" alt="Ошибка" />
+            <span>{{ $t('common.paymentForm.iin.error') }}</span>
+          </div>
+          <button :disabled="!allowContinue || loadButton"
+            :class="{ 'default-button btn-iin': true, 'mobile-btn': innerWidth <= 768 }" type="submit">
+            <loader v-if="loadButton" size="small" fillColor="#fff" strokeColor="rgba(255, 255, 255, 0.5)" />
+            <span v-else>{{ $t('common.continue') }}</span>
+          </button>
+          <div class="partners-content">
+            <b>{{ $t('common.ourPartners') }}</b>
+            <p>{{ $t('common.offersForYou') }}</p>
+            <div class="partners">
+              <div class="logo-partner">
+                <img src="../../assets/logos/airba.png" />
+              </div>
+              <div class="logo-partner">
+                <img src="../../assets/logos/halyk.png" />
+              </div>
+              <div class="logo-partner">
+                <img src="../../assets/logos/freedom.png" />
+              </div>
+              <div class="logo-partner">
+                <img src="../../assets/logos/eurasian.png" />
+              </div>
             </div>
           </div>
         </div>
@@ -50,10 +57,12 @@ import { checkInnShort } from '../../utils'
 import { agreement } from '../../api/order'
 import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
 import Loader from '../../components/Loader/Loader.vue'
+import MobileHeader from '../../components/MobileHeader/MobileHeader.vue'
+import MobileHeaderLogos from '../../components/MobileHeaderLogos/MobileHeaderLogos.vue'
 export default {
   name: 'IinPage',
-  props: ['order', 'specification'],
-  components: { DefaultLoader, Loader },
+  props: ['order', 'specification', 'innerWidth'],
+  components: { DefaultLoader, Loader, MobileHeader, MobileHeaderLogos },
   data() {
     return {
       iin: null,
@@ -129,7 +138,7 @@ export default {
 
   b {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 24px;
     margin-bottom: 8px;
   }
@@ -143,10 +152,6 @@ export default {
 
 .process-content {
   min-height: 494px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 .partners {
@@ -288,6 +293,32 @@ export default {
     line-height: 18px;
     color: #f15515;
     margin-left: 4px;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .amount-info {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    background: #FFFFFF;
+  }
+
+  .logo-partner {
+    background-color: #fff;
+  }
+
+  .partners-content {
+    margin-top: 32px;
+
+    p {
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+
+  .partners {
+    margin-top: 16px;
   }
 }
 </style>

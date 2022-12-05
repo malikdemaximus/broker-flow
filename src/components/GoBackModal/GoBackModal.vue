@@ -33,7 +33,11 @@ export default {
   props: ['redirectUrl'],
   methods: {
     goBack() {
-      window.location.href = this.redirectUrl
+      if (this.redirectUrl) {
+        window.location.href = this.redirectUrl
+      } else {
+        history.back()
+      }
       this.$emit('close')
     }
   }
@@ -127,5 +131,28 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+@media screen and (max-width: 769px) {
+  .modal-container {
+    margin-left: 24px;
+    margin-right: 24px;
+    width: calc(100vw - 48px);
+    margin: auto;
+  }
+
+  .modal-body {
+    h3 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
+
+  .modal-footer {
+    margin-top: 24px;
+  }
 }
 </style>

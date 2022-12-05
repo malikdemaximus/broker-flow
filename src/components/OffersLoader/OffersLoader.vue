@@ -43,4 +43,24 @@ export default {
     margin-top: 16px;
   }
 }
+
+@media screen and (max-width: 769px) {
+  .offers-loader-content {
+    margin: auto;
+    background-color: #fff;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    h3 {
+      font-size: 20px;
+      line-height: 30px;
+      margin-top: 50px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+}
 </style>

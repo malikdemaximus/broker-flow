@@ -1,28 +1,34 @@
 <template>
   <div class="process-wrapper">
     <div class="process-content">
-      <h3 class="title">{{ $t('common.loanProcessing') }}</h3>
-      <div class="otp-info">
-        <p>{{ $t('common.enterOtpCode') }} <b> +7 {{ phoneNumber }}</b></p>
+      <mobile-header :text="'common.loanProcessing'" :redirectUrl="order?.redirectUrl" v-if="(innerWidth < 769)" />
+      <div class="process-info">
+        <h3 class="title" v-if="(innerWidth > 769)">{{ $t('common.loanProcessing') }}</h3>
+        <mobile-header-logos :order="order" v-if="(innerWidth < 769)" />
+        <div class="otp-info">
+          <p>{{ $t('common.enterOtpCode') }} <b> +7 {{ phoneNumber }}</b></p>
+        </div>
+        <div class="otp-numbers">
+          <OTP v-show="!loading" :digit-count="4" :incorrectOtp="incorrectOtp" :correctOtp="correctOtp"
+            @update:otp="otpValue = $event" />
+          <default-loader v-show="loading" size="middle" />
+        </div>
+        <span v-if="incorrectOtp" class="error-otp">Проверьте, правильно ли введен код</span>
+        <p class="agreement">
+          {{ agreementText.slice(0, agreementText.indexOf('Публичной оферте')) }}
+          <a href="https://static-data.object.pscloud.io/docs/broker_agreement.pdf" target="_blank">{{
+              agreementText.slice(agreementText.indexOf('Публичной оферте'), agreementText.indexOf('и подписываю'))
+          }}</a> и подписываю
+          <a href="">Согласие на сбор и обработку персональных данных</a>
+        </p>
+        <button :disabled="seconds !== 0" :class="{ 'default-button': true, 'mobile-btn': innerWidth < 769 }"
+          @click="resetSeconds()">
+          <span v-if="seconds !== 0">{{ $t('common.resendAfter') }} {{ seconds }} {{ $t('common.sec') }}
+            {{ $t('common.afterSec') }}</span>
+          <span v-else>{{ $t('common.resend') }}</span>
+        </button>
       </div>
-      <div class="otp-numbers">
-        <OTP v-show="!loading" :digit-count="4" :incorrectOtp="incorrectOtp" :correctOtp="correctOtp"
-          @update:otp="otpValue = $event" />
-        <default-loader v-show="loading" size="middle" />
-      </div>
-      <span v-if="incorrectOtp" class="error-otp">Проверьте, правильно ли введен код</span>
-      <p class="agreement">
-        {{ agreementText.slice(0, agreementText.indexOf('Публичной оферте')) }}
-        <a href="https://static-data.object.pscloud.io/docs/broker_agreement.pdf" target="_blank">{{
-            agreementText.slice(agreementText.indexOf('Публичной оферте'), agreementText.indexOf('и подписываю'))
-        }}</a> и подписываю
-        <a href="">Согласие на сбор и обработку персональных данных</a>
-      </p>
-      <button :disabled="seconds !== 0" class="default-button" @click="resetSeconds()">
-        <span v-if="seconds !== 0">{{ $t('common.resendAfter') }} {{ seconds }} {{ $t('common.sec') }}
-          {{ $t('common.afterSec') }}</span>
-        <span v-else>{{ $t('common.resend') }}</span>
-      </button>
+
     </div>
   </div>
 </template>
@@ -31,10 +37,12 @@
 import OTP from '../../components/OTP/OTP.vue'
 import { verifyAgreementId, verifyAgreement } from '../../api/order'
 import DefaultLoader from '../../components/DefaultLoader/DefaultLoader.vue'
+import MobileHeaderLogos from '../../components/MobileHeaderLogos/MobileHeaderLogos.vue'
+import MobileHeader from '../../components/MobileHeader/MobileHeader.vue'
 export default {
   name: 'OtpPage',
-  components: { OTP, DefaultLoader },
-  props: ['order', 'specification', 'iin', 'signAgreementId'],
+  components: { OTP, DefaultLoader, MobileHeaderLogos, MobileHeader },
+  props: ['order', 'specification', 'iin', 'signAgreementId', 'innerWidth'],
   data() {
     return {
       otpValue: '',
@@ -76,8 +84,12 @@ export default {
     },
     phoneNumber() {
       let x = this.order?.customer?.contact?.mobileNumber.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      return '(' + x[1] + ') ' + x[2] + '-' + x[3] + '-' + x[4];
-    }
+      if (x) {
+        return '(' + x[1] + ') ' + x[2] + '-' + x[3] + '-' + x[4]
+      } else {
+        return null
+      }
+    },
   },
   mounted() {
     this.startSeconds()
@@ -159,5 +171,27 @@ export default {
   text-align: center;
   margin-top: 16px;
   display: block;
+}
+
+@media screen and (max-width: 769px) {
+  .otp-info {
+    padding: 0 8px;
+    margin-bottom: 40px;
+
+    p {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center;
+    }
+
+    b {
+      display: block;
+    }
+  }
+
+  .agreement {
+    margin-top: 64px;
+  }
 }
 </style>
